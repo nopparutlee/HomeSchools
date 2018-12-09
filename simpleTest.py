@@ -21,12 +21,21 @@ def get_documents():
     print(query)
     query = tokenize(query)
     results = searcher.search(query, 10)
+    # results are SearchResult, need to work with the offset and convert to Document object
+    for result in results:
+        if result.score > 0:
+            result.document.set_query_offset(query)
+        else:
+            result.document.query_offset = 0
+
+    for i in range(len(results)):
+        results[i] = results[i].document
     jsons = jsonify([e.serialize() for e in results])
     # r = Response(response="OK", status=200, mimetype="text/html")
     r = app.make_response(jsons)
     r.headers["Context-Type"] = "text/html; charset=utf-8"
     return r
-    #return jsonify([e.serialize() for e in results])
+    # return jsonify([e.serialize() for e in results])
     # return jsonify(query=query)
 
 

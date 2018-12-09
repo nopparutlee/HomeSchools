@@ -147,7 +147,7 @@ class TFIDFSearcher(object):
         if k > len(results):
             k = len(results)
         for i in range(k):
-            documents_to_return.append(results[i].document)
+            documents_to_return.append(results[i])#.document) # changed to return the SearchResult for further calculation
 
         return documents_to_return
 
